@@ -1,10 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.plank.firma_aircraft.mixin",
+  "package": "com.plank.firma_aircraft.mixins",
   "compatibilityLevel": "JAVA_8",
   "refmap": "firma_aircraft.refmap.json",
   "mixins": [
+    "EngineVehicleMixin",
+    "UtilsMixin"
   ],
   "client": [
   ],

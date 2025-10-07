@@ -13,7 +13,7 @@
     ],
     "I": [
       {
-        "item": "minecraft:iron_ingot"
+        "item": "tfc:metal/sheet/wrought_iron"
       }
     ]
   },

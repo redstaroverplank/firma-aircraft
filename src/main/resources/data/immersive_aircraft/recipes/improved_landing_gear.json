@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " II",
-    "CCI",
+    "  I",
+    "CII",
     "CC "
   ],
   "key": {
     "C": [
       {
-        "item": "minecraft:coal"
+        "item": "minecraft:bamboo_mosaic"
       }
     ],
     "I": [
       {
-        "item": "minecraft:iron_ingot"
+        "item": "tfc:metal/rod/wrought_iron"
       }
     ]
   },

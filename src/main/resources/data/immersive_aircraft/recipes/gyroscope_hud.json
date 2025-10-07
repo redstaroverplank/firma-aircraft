@@ -18,7 +18,7 @@
     ],
     "I": [
       {
-        "item": "minecraft:gold_ingot"
+        "item": "tfc:metal/sheet/brass"
       }
     ],
     "L": [
@@ -28,12 +28,12 @@
     ],
     "N": [
       {
-        "item": "minecraft:gold_nugget"
+        "item": "tfc:metal/sheet/gold"
       }
     ],
     "P": [
       {
-        "item": "minecraft:glass_pane"
+        "item": "tfc:lens"
       }
     ],
     "V": [

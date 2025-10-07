@@ -9,12 +9,12 @@
   "key": {
     "T": [
       {
-        "item": "minecraft:tnt"
+        "item": "tfc:powderkeg"
       }
     ],
     "I": [
       {
-        "item": "minecraft:iron_ingot"
+        "item": "tfc:metal/sheet/wrought_iron"
       }
     ]
   },

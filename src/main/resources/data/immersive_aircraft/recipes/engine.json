@@ -8,12 +8,12 @@
   "key": {
     "F": [
       {
-        "item": "minecraft:blast_furnace"
+        "item": "tfc:blast_furnace"
       }
     ],
     "C": [
       {
-        "item": "minecraft:cobblestone"
+        "item": "tfc:metal/sheet/steel"
       }
     ],
     "I": [

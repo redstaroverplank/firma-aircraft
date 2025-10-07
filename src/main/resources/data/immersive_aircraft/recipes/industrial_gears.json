@@ -1,24 +1,23 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " II",
-    "CLI",
-    "CC "
+    "CB",
+    "BI"
   ],
   "key": {
     "C": [
       {
-        "item": "minecraft:copper_ingot"
+        "item": "tfc:metal/sheet/copper"
       }
     ],
     "I": [
       {
-        "item": "minecraft:iron_ingot"
+        "item": "tfc:metal/sheet/wrought_iron"
       }
     ],
-    "L": [
+    "B": [
       {
-        "item": "minecraft:lever"
+        "item": "tfc:brass_mechanisms"
       }
     ]
   },

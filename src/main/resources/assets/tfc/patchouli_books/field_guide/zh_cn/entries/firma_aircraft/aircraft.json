@@ -1,0 +1,17 @@
+{
+  "name": "飞机",
+  "category": "tfc:firma_aircraft",
+  "icon": "immersive_aircraft:biplane",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe":"immersive_aircraft:boiler",
+      "text": "现在你可以在群峦传说制作飞机了。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "现在引擎驱动的飞机消耗的燃料变为燃油。$(br)支持任何能用于点灯的燃料。$(br)使用方法：将燃料放入$(l:mechanics/barrels)大桶$()，然后将大桶放入飞机的燃料槽中作为飞机的油箱。$(br)当飞机的引擎启动后（默认长按空格），会缓慢消耗油箱里的燃油，消耗速度为灯的20倍（1000mB橄榄油能烧5个小时，满箱橄榄油能烧56个小时）。"
+    }
+  ],
+  "read_by_default": true
+}

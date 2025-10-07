@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CC ",
+    "C C",
     " P ",
-    " CC"
+    "C C"
   ],
   "key": {
     "C": [
       {
-        "item": "minecraft:copper_ingot"
+        "item": "tfc:metal/sheet/brass"
       }
     ],
     "P": [

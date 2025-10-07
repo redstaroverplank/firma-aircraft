@@ -1,0 +1,17 @@
+{
+  "name": "Aircraft",
+  "category": "tfc:firma_aircraft",
+  "icon": "immersive_aircraft:biplane",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe":"immersive_aircraft:boiler",
+      "text": "Now you can craft the aircraft in TFC."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Now the fuel consumed by the engine-driven aircraft is changed to fuel oil. $(br)Supports any fuel that can be used on lamps. $(br)Usage: Put the fuel into the $(l:mechanics/barrels)Barrel$(), and then place the barrel into the aircraft's fuel slot as the aircraft's oil tank. $(br)When the aircraft's engine starts (default long press Space), it will slowly consume the fuel oil in the tank at a rate 20 times that of a lamp (1000mB of olive oil can burn for 5 hours, a full tank of olive oil can burn for 56 hours)."
+    }
+  ],
+  "read_by_default": true
+}

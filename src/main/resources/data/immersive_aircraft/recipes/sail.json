@@ -8,12 +8,12 @@
   "key": {
     "S": [
       {
-        "item": "minecraft:string"
+        "item": "tfc:burlap_cloth"
       }
     ],
     "C": [
       {
-        "item": "minecraft:white_carpet"
+        "item": "tfc:jute_fiber"
       }
     ]
   },

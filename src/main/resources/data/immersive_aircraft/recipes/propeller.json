@@ -2,13 +2,18 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "II ",
-    " I ",
+    " B ",
     " II"
   ],
   "key": {
     "I": [
       {
-        "item": "minecraft:iron_ingot"
+        "item": "tfc:metal/sheet/wrought_iron"
+      }
+    ],
+    "B": [
+      {
+        "item": "tfc:metal/rod/wrought_iron"
       }
     ]
   },

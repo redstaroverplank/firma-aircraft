@@ -8,12 +8,12 @@
   "key": {
     "C": [
       {
-        "item": "minecraft:iron_ingot"
+        "item": "tfc:metal/sheet/steel"
       }
     ],
     "F": [
       {
-        "item": "minecraft:blast_furnace"
+        "item": "tfc:blast_furnace"
       }
     ],
     "B": [

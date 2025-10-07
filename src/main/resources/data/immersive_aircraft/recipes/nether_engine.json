@@ -1,29 +1,29 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CNC",
-    "BEB",
+    "BNB",
+    "CEC",
     "RRR"
   ],
   "key": {
     "C": [
       {
-        "item": "minecraft:magma_cream"
+        "item": "tfc:metal/sheet/steel"
       }
     ],
     "B": [
       {
-        "item": "minecraft:blaze_rod"
+        "item": "tfc:brass_mechanisms"
       }
     ],
     "R": [
       {
-        "item": "minecraft:nether_brick"
+        "item": "tfc:ceramic/fire_brick"
       }
     ],
     "N": [
       {
-        "item": "minecraft:netherite_ingot"
+        "item": "tfc:metal/sheet/black_steel"
       }
     ],
     "E": [

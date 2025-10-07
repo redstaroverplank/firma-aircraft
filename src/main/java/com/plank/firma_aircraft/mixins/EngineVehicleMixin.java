@@ -1,88 +1,165 @@
 package com.plank.firma_aircraft.mixins;
 
 import com.plank.firma_aircraft.Fuel;
-import com.plank.firma_aircraft.Tags;
 import immersive_aircraft.config.Config;
 import immersive_aircraft.entity.EngineVehicle;
 import immersive_aircraft.entity.inventory.VehicleInventoryDescription;
 import immersive_aircraft.entity.inventory.slots.SlotDescription;
-import net.minecraft.nbt.CompoundTag;
+import net.dries007.tfc.util.LampFuel;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @Mixin(EngineVehicle.class)
-public class AbstractFurnaceBlockEntityMixin implements Fuel {
+public class EngineVehicleMixin implements Fuel {
 
-    @Unique
-    private static final EntityDataAccessor<Float> UTILIZATION = SynchedEntityData.defineId(EngineVehicle.class, EntityDataSerializers.FLOAT);
-    @Unique
-    private static final EntityDataAccessor<Boolean> LOW_ON_FUEL = SynchedEntityData.defineId(EngineVehicle.class, EntityDataSerializers.BOOLEAN);
+    @Final
+    @Shadow
+    private static EntityDataAccessor<Float> UTILIZATION;
+
+    @Final
+    @Shadow
+    private static EntityDataAccessor<Boolean> LOW_ON_FUEL;
 
     /**
-     * 修改燃料消耗逻辑，直接消耗桶内的流体
+     * 修改燃料补充逻辑，在补充时消耗1mb流体
      */
-    @Inject(method = "consumeFuel", at = @At("HEAD"), cancellable = true)
-    private void consumeBarrelFluid(float consumption, CallbackInfoReturnable<Float> cir) {
+    @Inject(method = "refuel*", at = @At("HEAD"), cancellable = true, remap = false)
+    private void refuelWithFluid(CallbackInfo ci) {
         EngineVehicle vehicle = (EngineVehicle) (Object) this;
+
+        // 只在服务端执行
+        if (vehicle.level().isClientSide) {
+            return;
+        }
 
         // 获取所有燃料槽
         List<SlotDescription> fuelSlots = vehicle.getInventoryDescription().getSlots(VehicleInventoryDescription.BOILER);
 
-        for (SlotDescription slot : fuelSlots) {
+        for (int i = 0; i < fuelSlots.size(); i++) {
+            SlotDescription slot = fuelSlots.get(i);
             ItemStack stack = vehicle.getInventory().getItem(slot.index());
 
             if (stack.isEmpty()) continue;
 
-            // 检查是否为燃料桶
-            if (stack.is(Tags.FUEL_BARRELS)) {
-                float remainingConsumption = consumeFluidFromBarrel(stack, consumption);
-                if (remainingConsumption < consumption) {
-                    // 成功消耗了部分燃料
-                    consumption = remainingConsumption;
-                    if (consumption <= 0) {
-                        cir.setReturnValue(0.0f);
-                        cir.cancel();
-                    }
-                }
+            // 检查是否为TFC大桶
+            if (Fuel.isTFCBarrel(stack)) {
+
+                // 消耗流体并补充燃料
+                refuelFromBarrel(stack, i);
             }
+        }
+        ci.cancel();
+    }
+
+    /**
+     * 从大桶中消耗流体并补充燃料
+     */
+    @Unique
+    private void refuelFromBarrel(ItemStack barrelStack, int fuelIndex) {
+        // 获取桶内的流体
+        FluidStack fluidStack = Fuel.getFluidFromBarrel(barrelStack);
+        LampFuel fuel = Fuel.getFuel(fluidStack.getFluid());
+
+        if (fluidStack.isEmpty()) {
+            return; // 没有流体，不补充
+        }
+
+        // 检查流体是否为灯燃料
+        if (fuel == null) {
+            return; // 不是燃料流体，不补充
+        }
+
+        // 获取当前燃料值
+        int currentFuel = getFuelValue(fuelIndex);
+
+        // 获取燃烧率
+        int burnRate = fuel.getBurnRate();
+        if (burnRate <= 0) {
+            setFuelValue(fuelIndex, 1000);
+            return;
+        }
+
+        // 如果当前燃料值低于100刻，则补充燃料
+        if (currentFuel < 1000) {
+            // 关键：只更新桶内流体，不消耗桶物品
+            fluidStack.shrink(1);
+            Fuel.updateBarrelFluid(barrelStack, fluidStack);
+
+            // 补充燃料值
+            setFuelValue(fuelIndex, currentFuel + burnRate / 20);
         }
     }
 
     /**
-     * 修改燃料利用率计算，基于桶内流体
+     * 获取燃料值 - 需要访问原EngineVehicle的fuel数组
      */
-    @Inject(method = "getFuelUtilization", at = @At("HEAD"), cancellable = true)
-    private void calculateBarrelFuelUtilization(CallbackInfoReturnable<Float> cir) {
+    @Unique
+    private int getFuelValue(int index) {
+        try {
+            // 使用反射访问私有fuel数组
+            Field fuelField = EngineVehicle.class.getDeclaredField("fuel");
+            fuelField.setAccessible(true);
+            int[] fuel = (int[]) fuelField.get(this);
+
+            if (index >= 0 && index < fuel.length) {
+                return fuel[index];
+            }
+        } catch (Exception ignored) {
+        }
+        return 0;
+    }
+
+    /**
+     * 设置燃料值 - 需要访问原EngineVehicle的fuel数组
+     */
+    @Unique
+    private void setFuelValue(int index, int value) {
+        try {
+            // 使用反射访问私有fuel数组
+            Field fuelField = EngineVehicle.class.getDeclaredField("fuel");
+            fuelField.setAccessible(true);
+            int[] fuel = (int[]) fuelField.get(this);
+
+            if (index >= 0 && index < fuel.length) {
+                fuel[index] = value;
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    /**
+     * 修改燃料利用率计算，基于LampFuel系统
+     */
+    @Inject(method = "getFuelUtilization", at = @At("HEAD"), cancellable = true, remap = false)
+    private void calculateLampFuelUtilization(CallbackInfoReturnable<Float> cir) {
         EngineVehicle vehicle = (EngineVehicle) (Object) this;
 
         // 检查配置和创意模式
         if (Config.getInstance().fuelConsumption == 0) {
             cir.setReturnValue(1.0f);
-            cir.cancel();
+            return;
         }
         if (!Config.getInstance().burnFuelInCreative && vehicle.isPilotCreative()) {
             cir.setReturnValue(1.0f);
-            cir.cancel();
+            return;
         }
 
         List<SlotDescription> fuelSlots = vehicle.getInventoryDescription().getSlots(VehicleInventoryDescription.BOILER);
         if (fuelSlots.isEmpty()) {
             cir.setReturnValue(1.0f);
-            cir.cancel();
+            return;
         }
 
         int barrelsWithFuel = 0;
@@ -90,22 +167,21 @@ public class AbstractFurnaceBlockEntityMixin implements Fuel {
 
         for (SlotDescription slot : fuelSlots) {
             ItemStack stack = vehicle.getInventory().getItem(slot.index());
-            if (stack.is(Tags.FUEL_BARRELS)) {
+            if (Fuel.isTFCBarrel(stack)) {
                 totalBarrels++;
-                if (hasFluidInBarrel(stack)) {
+                if (hasLampFuelInBarrel(stack)) {
                     barrelsWithFuel++;
                 }
             }
         }
 
         if (totalBarrels == 0) {
-            cir.setReturnValue(0.0f); // 没有燃料桶
+            cir.setReturnValue(0.0f);
             return;
         }
 
         float utilization = (float) barrelsWithFuel / totalBarrels;
-        // 检查是否有低燃料警告
-        boolean lowFuel = isAnyBarrelLowOnFluid(vehicle);
+        boolean lowFuel = isAnyBarrelLowOnLampFuel(vehicle);
 
         utilization *= (lowFuel ? 0.75f : 1.0f);
 

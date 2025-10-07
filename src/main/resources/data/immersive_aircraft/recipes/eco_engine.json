@@ -8,7 +8,7 @@
   "key": {
     "C": [
       {
-        "item": "minecraft:slime_ball"
+        "item": "tfc:glue"
       }
     ],
     "R": [
@@ -18,7 +18,7 @@
     ],
     "N": [
       {
-        "item": "minecraft:gold_ingot"
+        "item": "tfc:metal/sheet/brass"
       }
     ],
     "E": [

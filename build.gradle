@@ -159,6 +159,8 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+    implementation files('libs/TerraFirmaCraft-Forge-1.20.1-3.2.14.jar')
+    implementation files('libs/immersive_aircraft-1.4.0+1.20.1-forge.jar')
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
