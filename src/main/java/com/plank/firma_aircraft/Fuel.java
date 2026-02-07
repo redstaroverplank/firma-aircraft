@@ -141,7 +141,7 @@ public interface Fuel {
         CompoundTag inventoryTag = blockEntityTag.getCompound("inventory");
         CompoundTag tankTag = inventoryTag.getCompound("tank");
 
-        if (fluidStack.getAmount() == 0) {
+        if (fluidStack == null) {
             // 清空tank
             inventoryTag.remove("tank");
         } else {

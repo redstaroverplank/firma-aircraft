@@ -25,11 +25,11 @@ import java.util.List;
 public class EngineVehicleMixin implements Fuel {
 
     @Final
-    @Shadow
+    @Shadow(remap = false)
     private static EntityDataAccessor<Float> UTILIZATION;
 
     @Final
-    @Shadow
+    @Shadow(remap = false)
     private static EntityDataAccessor<Boolean> LOW_ON_FUEL;
 
     /**
@@ -94,7 +94,8 @@ public class EngineVehicleMixin implements Fuel {
         // 如果当前燃料值低于100刻，则补充燃料
         if (currentFuel < 1000) {
             // 关键：只更新桶内流体，不消耗桶物品
-            fluidStack.shrink(1);
+            if (fluidStack.getAmount() == 1) fluidStack = null;
+            else fluidStack.shrink(1);
             Fuel.updateBarrelFluid(barrelStack, fluidStack);
 
             // 补充燃料值

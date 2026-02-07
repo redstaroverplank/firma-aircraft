@@ -1,0 +1,16 @@
+{
+  
+  "type": "tfc:anvil",
+  "input": {
+    "item": "tfc:metal/double_sheet/wrought_iron"
+  },
+  "result": {
+    "item": "warfare_wings:wing_mg"
+  },
+  "tier": 3,
+  "rules": [
+    "hit_last",
+    "hit_second_last",
+    "bend_third_last"
+  ]
+}

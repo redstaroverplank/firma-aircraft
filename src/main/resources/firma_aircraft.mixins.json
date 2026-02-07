@@ -6,6 +6,7 @@
   "refmap": "firma_aircraft.refmap.json",
   "mixins": [
     "EngineVehicleMixin",
+    "SimpleRecipeRemovalMixin",
     "UtilsMixin"
   ],
   "client": [

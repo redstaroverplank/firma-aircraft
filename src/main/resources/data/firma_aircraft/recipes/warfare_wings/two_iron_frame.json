@@ -1,0 +1,13 @@
+{
+    "type": "tfc:welding",
+    "first_input": {
+        "item": "warfare_wings:iron_frame"
+    },
+    "second_input": {
+        "item": "warfare_wings:iron_frame"
+    },
+    "tier": 3,
+    "result": {
+        "item": "warfare_wings:two_iron_frame"
+    }
+}

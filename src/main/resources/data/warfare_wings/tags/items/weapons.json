@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "warfare_wings:wing_mg",
+    "warfare_wings:ww_bomb",
+    "warfare_wings:ww_jbomb",
+    "warfare_wings:ww_gbomb",
+    "warfare_wings:ww_sbomb",
+    "warfare_wings:ww_usbomber",
+    "warfare_wings:ww_jbomber",
+    "warfare_wings:ww_gbomber",
+    "warfare_wings:ww_sbomber",
+    "warfare_wings:ww_jgbomb",
+    "warfare_wings:ww_usgbomb"
+  ]
+}
